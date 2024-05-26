@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Create S3 Bucket"
+
+Resources:
+  S3Bucket:  #logicat Name/ID
+    Type: AWS::S3::Bucket  #type of resource
+    Properties: 
+      BucketName: srcecde-cf-mhtvvbd
+
+Outputs:
+  BucketName:
+    Value: !Ref 'S3Bucket'
