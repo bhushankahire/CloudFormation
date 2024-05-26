@@ -1,0 +1,38 @@
+#we are goinignt to impliment the stack ChangeSet with the bellow template.
+#where at first we are going to write templete for creating the s3 bucket with #input of s3 bucket name from the user.
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'ChangeSet'
+
+Parameters:
+  S3BucketName:
+    Description: "Enter S3 Bucket Name"
+    Type: String
+
+#  InstanceTypeParameter:
+#    Type: String
+#    Default: t2.micro
+#    AllowedValues:
+#      - t2.micro
+#      - t2.small
+#      - t2.medium
+#    Description: 'Enter instance type t2.micro, t2.small, t2.medium'
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+
+#  Instance:
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      InstanceType: !Ref InstanceTypeParameter
+#      ImageId: ami-0bb84b8ffd87024d8
+
+Outputs:
+  BucketName: 
+    Value: !Ref 'S3Bucket'
+
+#  InstanceName:
+#    Value: !Ref 'Instance'
