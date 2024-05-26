@@ -1,0 +1,63 @@
+
+#in this template we are creating the the EC2 instance for DEV, PROD, and QA environment using same templet. the catch is when we select the prod invironment on that time one additional 100 GB voilume is going to create and attached to the prod invironment.
+#this above condition we are going to impliment by using confition !Equals, Mapping, and Parameters
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Create EC2 Instance"
+
+Parameters:
+  Environment:
+    Type: String
+    AllowedValues:
+      - dev
+      - qa
+      - prod
+
+Mappings:
+  EnvMap: #logical id/map name
+    dev:
+      instanceType: "t2.large"
+      name: "dev"
+
+    qa:
+      instanceType: "t2.medium"
+      name: "qa"
+
+    prod:
+      instanceType: "t2.xlarge"
+      name: "prod"
+
+Conditions: #inf the customer enter prod only then the it match the condition for creating volume
+  CreateProdResources: !Equals [!Ref Environment, prod]
+
+Resources: 
+  Instance: #logical id/name
+    Type: AWS::EC2::Instance
+    Properties: 
+      InstanceType: !FindInMap [EnvMap, !Ref Environment, instanceType]
+      ImageId: ami-0bb84b8ffd87024d8
+      Tags: 
+        - Key: "Name"
+          Value: !FindInMap [EnvMap, !Ref Environment, name]
+
+  Mountpoint:
+    Type: AWS::EC2::VolumeAttachment
+    Condition: CreateProdResources
+    Properties:
+      InstanceId:
+       !Ref Instance
+      VolumeId:
+       !Ref NewVolume
+      Device: /dev/sdh
+
+  NewVolume:
+    Type: AWS::EC2::Volume
+    Condition: CreateProdResources
+    Properties:
+      Size: 100
+      AvailabilityZone: 
+        !GetAtt Instance.AvailabilityZone
+
+Outputs:
+  InstanceName:
+    Value: !FindInMap [EnvMap, !Ref Environment, name]
+
