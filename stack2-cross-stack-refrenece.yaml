@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: this is stack one for implimenting the Cross-stack reference
+
+Parameters:
+  InstanceTypeParameter:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+    Description: select the instance Type
+
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+        InstanceType: !Ref InstanceTypeParameter
+        ImageId: ami-04b70fa74e45c3917
+        AvailabilityZone:
+          Fn::ImportValue: !Sub AvlZone
+
+
+Outputs: 
+  InstanceId:
+    Value: !Ref Instance
+    Description: Insantce Information
