@@ -1,0 +1,29 @@
+#Problem statemet Create and CloudFormation template with user data he user data is the used to automate the the server configuration at runtime while launching the insatance
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: create EC2 with user Data
+
+Parameters:
+  InstanceTypeParameters:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+    Description: Enter t2.micro, t2.small, or t2.medium
+
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceTypeParameters
+      ImageId: ami-0e001c9271cf7f3b9
+      KeyName: testKey # this key is allready downladed by me 
+      UserData:
+        Fn::Base64: # here we write bash script for user data
+          !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install docker-compose -y
+          mkdir /home/ubuntu/sample

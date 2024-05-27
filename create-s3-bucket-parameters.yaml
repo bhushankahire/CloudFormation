@@ -1,3 +1,6 @@
+# Create an S3 bucket with specified parameters. In this example, we will write a template that prompts the user to input the bucket name. The bucket name must contain only alphabets (A-Z, a-z), have a minimum length of 5 characters, and a maximum length of 15 characters.
+
+
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Create S3 bucket"
 
@@ -5,8 +8,8 @@ Parameters:
   S3BucketName:
     Description: Enter name of S3 bucket
     Type: String
-    MinLength: 3
-    MaxLength: 10
+    MinLength: 5
+    MaxLength: 15
     AllowedPattern: "[A-Za-z]+"
 
 Resources:
