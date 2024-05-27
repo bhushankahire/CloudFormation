@@ -20,7 +20,6 @@ Resources:
         AvailabilityZone:
           Fn::ImportValue: !Sub AvlZone
 
-
 Outputs: 
   InstanceId:
     Value: !Ref Instance
