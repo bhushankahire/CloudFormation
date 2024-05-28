@@ -1,0 +1,20 @@
+#Probleme statement: Write a template to create and VPC with appropreate Cider range.
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Subnet with Fn::cidr
+
+
+Resources: 
+  ExaVpc:  #VPC logical name/ID
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: TestVpc
+
+Outputs:
+  OutPutSubnate:
+    Value: !Ref ExaVpc
+
+

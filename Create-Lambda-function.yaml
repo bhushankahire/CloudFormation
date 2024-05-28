@@ -1,0 +1,49 @@
+#Probleme statement: Write a CloudFormation template to create and Lambda function
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create Lambda function
+
+Parameters:
+  LambdaFunctionName:
+    Description: Enter the Lambda Function Name
+    Type: String
+    MinLength: 3
+    MaxLength: 15
+    AllowedPattern: "^[A-za-z0-9]*$"
+
+Resources: 
+    IAMRole:
+        Type: AWS::IAM::Role
+        Properties:
+            ManagedPolicyArns: 
+                - arn:aws:iam::aws:policy/AWSLambdaExecute
+
+            AssumeRolePolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                - Effect: Allow
+                  Principal:
+                    Service:
+                    - lambda.amazonaws.com
+                  Action:
+                  - sts:AssumeRole
+
+    LambdaFunction:
+        Type: AWS::Lambda::Function
+        Properties:
+            FunctionName: !Join ['-', [ !Ref LambdaFunctionName, !Ref AWS::StackName, !Ref AWS::Region ] ]
+            Handler: lambda_function.lambda_handler
+            Runtime: python3.8
+            Role: !GetAtt IAMRole.Arn
+            Code:
+              ZipFile: |
+                  import json
+                  def lambda_handler(event, context):
+                  print(f"Event: {event}")
+                  return {
+                         'statusCode': 200,
+                         'body': json.dumps('Hellow from Lambda!')
+                        }
+
+Outputs:
+  LambdaFunctionname:
+    Value: !Ref LambdaFunction

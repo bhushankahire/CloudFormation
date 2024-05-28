@@ -1,0 +1,24 @@
+#Probleme statement: Write a template to create and Subnet with appropreate Cider range use internsic funtion !Cidr
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Subnet with Fn::cidr
+
+
+Resources: 
+  ExaVpc:  #VPC logical name/ID
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+
+  ExampleSubnet:  #Subnate Logical Name
+    Type: AWS::EC2::Subnet
+    Properties:
+        CidrBlock: !Select [ 0, !Cidr [ !GetAtt ExaVpc.CidrBlock, 1, 8 ]] #!Cidr [IpBlock, Count, CirdBits]
+        VpcId: !Ref ExaVpc
+
+
+Outputs:
+  OutPutSubnate:
+    Value: !Select [ 0, !Cidr [ !GetAtt ExaVpc.CidrBlock, 1, 8 ]]
+
+
